@@ -4,12 +4,13 @@ import { AddShoppingCart } from '@material-ui/icons';
 import useStyles from './styles';
 
 
-const Product = ( {product} ) => {
+const Product = ( { product } ) => {
   const classes = useStyles();
 
+  
   return (
     <Card className={classes.root}>
-      <CardMedia className={classes.media} image='' title={product.title}/>
+      <CardMedia className={classes.media} image={product.image.url} title={product.name}/>
       <CardContent>
         <div className={classes.cardContent}>
           <Typography variant="h5">
@@ -18,7 +19,7 @@ const Product = ( {product} ) => {
         </div>
         <div className={classes.cardContent}>
           <Typography variant="h5">
-            {product.price}
+            {product.formatted_with_symbol}
           </Typography>
         </div>
         <Typography variant="body2" color="textSecondary">
