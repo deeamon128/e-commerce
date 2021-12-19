@@ -11,7 +11,7 @@ const Navbar = () => {
     <>
       <AppBar position="fixed" className={classes.appBar} color="inherit">
         <Toolbar>
-          <Typography>
+          <Typography className={classes.title} color="inherit">
             <img src={logo} alt="Commerce" height="25px" className={classes.image} />
             DShop
           </Typography>
