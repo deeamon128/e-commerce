@@ -5,7 +5,7 @@ import { useForm, FormProvider } from 'react-hook-form';
 import { commerce } from '../../lib/commerce';
 import FormInput from "../CheckoutForm/CustomTextField"
 
-const AddressForm = () => {
+const AddressForm = ({ checkoutToken }) => {
 
   const [shippingCountries, setShippingCountries] = useState([]);
   const [shippingCountry, setShippingCountry] = useState('');
@@ -14,6 +14,18 @@ const AddressForm = () => {
   const [shippingOptions, setShippingOptions] = useState([]);
   const [shippingOption, setShippingOption] = useState('');
   const methods = useForm();
+
+  const fetchShippingCountries = async (checkoutTokenId) => {
+    const { countries } = await commerce.services.localeListShippingCountries(checkoutTokenId);
+
+    setShippingCountries(countries);
+    setShippingCountry(Object.keys(countries)[0]);
+  };
+
+  useEffect(() => {
+    fetchShippingCountries(checkoutToken);
+  }, []);
+
 
   return (
     <>
@@ -29,12 +41,15 @@ const AddressForm = () => {
             <FormInput required name="zip" label="Postal code" />
             <Grid item xs={12} sm={6}>
               <InputLabel>Shipping Country</InputLabel>
-              <Select value={} fullWidth >
-                  <MenuItem key={} value={}>
+              <Select value={shippingCountry} fullWidth onChange={(e) => setShippingCountry(e.target.value)}>
+                {Object.entries(shippingCountries).map(([code, name]) => ({ id: code, label: name })).map((item) => (
+                  <MenuItem key={item.id} value={item.id}>
+                    {item.label}
                   </MenuItem>
+                ))}
               </Select>
             </Grid>
-            <Grid item xs={12} sm={6}>
+            {/* <Grid item xs={12} sm={6}>
               <InputLabel>Shipping Country</InputLabel>
               <Select value={} fullWidth >
                   <MenuItem key={} value={}>
@@ -47,7 +62,7 @@ const AddressForm = () => {
                   <MenuItem key={} value={}>
                   </MenuItem>
               </Select>
-            </Grid>
+            </Grid> */}
           </Grid>
         </form>
       </FormProvider>
