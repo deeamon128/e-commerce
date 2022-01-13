@@ -19,6 +19,12 @@ const Checkout = ({ cart, onCaptureCheckout, order, error }) => {
   const nextStep = () => setActiveStep((prevActiveStep) => prevActiveStep + 1);
   const backStep = () => setActiveStep((prevActiveStep) => prevActiveStep - 1);
 
+  const timeout = () => {
+    setTimeout(() => {
+      
+    }, 3000);
+  }
+
   useEffect(() => {
     if (cart.id) {
       const generateToken = async () => {
