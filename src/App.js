@@ -1,32 +1,35 @@
 import React, { useState, useEffect } from "react";
-import { commerce } from './lib/commerce';
+import { commerce } from "./lib/commerce";
 import Navbar from "./components/Navbar/Navbar";
 import Products from "./components/Products/Products";
 import Cart from "./components/Cart/Cart";
-import Checkout from "./components/CheckoutForm/Checkout/Checkout"
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Checkout from "./components/CheckoutForm/Checkout/Checkout";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import ReactGA from "react-ga";
 
+ReactGA.initialize("G-W9PY8H5TCQ");
+ReactGA.pageview(window.location.pathname + window.location.search);
 
 function App() {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [products, setProducts] = useState([]);
   const [cart, setCart] = useState({});
   const [order, setOrder] = useState({});
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState("");
 
   const fetchProduct = async () => {
     const { data } = await commerce.products.list();
     setProducts(data);
-  }
+  };
 
   const fetchCart = async () => {
     setCart(await commerce.cart.retrieve());
-  }
+  };
 
   const handleAddToCart = async (productID, quantity) => {
     const { cart } = await commerce.cart.add(productID, quantity);
-    setCart(cart)
-  }
+    setCart(cart);
+  };
 
   const handleUpdateCartQty = async (productId, quantity) => {
     const { cart } = await commerce.cart.update(productId, { quantity });
@@ -54,7 +57,10 @@ function App() {
 
   const handleCaptureCheckout = async (checkoutTokenId, newOrder) => {
     try {
-      const incomingOrder = await commerce.checkout.capture(checkoutTokenId, newOrder);
+      const incomingOrder = await commerce.checkout.capture(
+        checkoutTokenId,
+        newOrder
+      );
 
       setOrder(incomingOrder);
 
@@ -67,19 +73,51 @@ function App() {
   useEffect(() => {
     fetchProduct();
     fetchCart();
-  }, [])
+  }, []);
 
   const handleDrawerToggle = () => setMobileOpen(!mobileOpen);
 
   return (
     <div>
       <BrowserRouter>
-      <Navbar totalItems={cart.total_items} handleDrawerToggle={handleDrawerToggle}/>
-      <Routes>
-        <Route path="/" element={<Products products={products} onAddToCart={handleAddToCart}  handleUpdateCartQty />} />
-        <Route path="cart" element={<Cart cart={cart} onUpdateCartQty={handleUpdateCartQty} onRemoveFromCart={handleRemoveFromCart} onEmptyCart={handleEmptyCart}/>}/>
-        <Route path="/checkout" element={<Checkout cart={cart} order={order} onCaptureCheckout={handleCaptureCheckout} error={errorMessage} />}/>
-      </Routes>
+        <Navbar
+          totalItems={cart.total_items}
+          handleDrawerToggle={handleDrawerToggle}
+        />
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <Products
+                products={products}
+                onAddToCart={handleAddToCart}
+                handleUpdateCartQty
+              />
+            }
+          />
+          <Route
+            path="cart"
+            element={
+              <Cart
+                cart={cart}
+                onUpdateCartQty={handleUpdateCartQty}
+                onRemoveFromCart={handleRemoveFromCart}
+                onEmptyCart={handleEmptyCart}
+              />
+            }
+          />
+          <Route
+            path="/checkout"
+            element={
+              <Checkout
+                cart={cart}
+                order={order}
+                onCaptureCheckout={handleCaptureCheckout}
+                error={errorMessage}
+              />
+            }
+          />
+        </Routes>
       </BrowserRouter>
     </div>
   );
