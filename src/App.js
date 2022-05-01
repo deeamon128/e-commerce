@@ -5,10 +5,6 @@ import Products from "./components/Products/Products";
 import Cart from "./components/Cart/Cart";
 import Checkout from "./components/CheckoutForm/Checkout/Checkout";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import ReactGA from "react-ga";
-
-ReactGA.initialize("G-W9PY8H5TCQ");
-ReactGA.pageview(window.location.pathname + window.location.search);
 
 function App() {
   const [mobileOpen, setMobileOpen] = React.useState(false);
