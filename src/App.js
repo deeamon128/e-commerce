@@ -5,6 +5,10 @@ import Products from "./components/Products/Products";
 import Cart from "./components/Cart/Cart";
 import Checkout from "./components/CheckoutForm/Checkout/Checkout";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import ReactGA from "react-ga";
+
+const TRACKING_ID = "UA-227473837-1"; // OUR_TRACKING_ID
+ReactGA.initialize(TRACKING_ID);
 
 function App() {
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -69,6 +73,7 @@ function App() {
   useEffect(() => {
     fetchProduct();
     fetchCart();
+    ReactGA.pageview(window.location.pathname + window.location.search);
   }, []);
 
   const handleDrawerToggle = () => setMobileOpen(!mobileOpen);
